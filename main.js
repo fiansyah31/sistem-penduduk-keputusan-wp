@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDataAlt();
     document.addEventListener(SAVED_EVENT, function(){
         loadDataAlt();
-    })
+    });
 });
 
 const resultNormalis = document.getElementById('hitung');
@@ -35,6 +35,9 @@ const resultNormalis = document.getElementById('hitung');
         loadDataAlt();
         if(alternatifs.length > 1){
             hitungAlternatif();
+            if(normalisasi.length > 1){
+                resultNormalis.setAttribute('style', 'display:none;');
+            }
         }
         else {
             alert('Harap masukan minimal 2 data yang ingin di proses');
@@ -78,17 +81,44 @@ function generateAlternatif(id, alternatif, criteria1, criteria2, criteria3, cri
     }
 }
 
+function findAltIndex(alternatiId){
+    for(const index in alternatifs){
+        if(alternatifs[index].id === alternatiId){
+            return index;
+        }
+    }
+    return -1;
+}
+
+function deleteAlternatif(alternatiId) {
+    const targetId = findAltIndex(alternatiId);
+    if(targetId === -1) return;
+
+    alternatifs.splice(targetId, 1);
+    saveLocalDataAlt();
+    document.dispatchEvent(new Event(RENDER_EVENT));
+}
 function makeAlternatif(alternatifArray) {
     let row = document.createElement('tr');
-        for (let i=0; i < alternatifs.length; i++) {
-            row.innerHTML = "<td>" + alternatifArray.alternatif + "</td>";
-            row.innerHTML += "<td>" + alternatifArray.criteria1 + "</td>";
-            row.innerHTML += "<td>" + alternatifArray.criteria2 + "</td>";
-            row.innerHTML += "<td>" + alternatifArray.criteria3 + "</td>";
-            row.innerHTML += "<td>" + alternatifArray.criteria4 + "</td>";
-            row.innerHTML += "<td>" + alternatifArray.criteria5 + "</td>";
-        }
-        return row;
+    for (let i=0; i < alternatifs.length; i++) {
+        row.innerHTML = "<td>" + alternatifArray.alternatif + "</td>";
+        row.innerHTML += "<td>" + alternatifArray.criteria1 + "</td>";
+        row.innerHTML += "<td>" + alternatifArray.criteria2 + "</td>";
+        row.innerHTML += "<td>" + alternatifArray.criteria3 + "</td>";
+        row.innerHTML += "<td>" + alternatifArray.criteria4 + "</td>";
+        row.innerHTML += "<td>" + alternatifArray.criteria5 + "</td>";
+        row.innerHTML += "<td><button id='buttondelete' onclick='deleteAlternatif("+alternatifArray.id+")'>Hapus</button></td>";
+    }
+    return row;
+}
+function resultRank(s){
+    let rows = document.createElement('tr');
+    for (let i=0; i < normalisasi.length; i++) {
+        rows.innerHTML = "<td>" + s.alternatif + "</td>";
+        rows.innerHTML += "<td>" + s.vektor + "</td>";
+        rows.innerHTML += "<td>" + s.normalis + "</td>";
+    }
+    return rows;
 }
 document.addEventListener(RENDER_EVENT, function() {   
     const div = document.getElementById('resultAlternatif');
@@ -104,8 +134,7 @@ document.addEventListener(RENDER_EVENT, function() {
     divs.innerHTML = '';
 
         for(const item of normalisasi){
-            const normalisH = document.createElement('p');
-            normalisH.innerText = item.alternatif;
+            const normalisH = resultRank(item);
             divs.append(normalisH);   
         }
         desCendingRank();
@@ -142,6 +171,7 @@ function hitungVektor(){
          for (const vektorId of hasilAlt){
              results = {
                  id : vektorId.id, 
+                 vektor : vektorId.vektor, 
                  alternatif : vektorId.alternatif,
                  normalis :  vektorId.vektor / total,
              };
@@ -151,9 +181,9 @@ function hitungVektor(){
     document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
-function findTodo(element){
-    for(const TodoItem of vektor){
-        if(TodoItem.id == element.id){
+function findTodo(alternatifId){
+    for(const TodoItem of alternatifs){
+        if(TodoItem.id == alternatifId){
             return TodoItem;
         }
     }

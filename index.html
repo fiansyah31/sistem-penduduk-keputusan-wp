@@ -11,6 +11,7 @@
             margin: 0;
         }
         main {
+            width: 100%;
             padding: 40px;
         }
         article {
@@ -60,29 +61,63 @@
         #resultNormalisasi p {
             margin-bottom: 10px;
         }
+        #rank {
+            margin-top: 40px;
+        }
+        #buttondelete {
+            background-color: #cc0d0d;
+            border: 1px solid #cc0d0d;
+        }
+        .info {
+            color: #474747;
+            font-style: italic;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 545px) {
+            main {
+                overflow-x: hidden;
+            padding: 0px;
+        }
+            table {
+                width: 100%;
+            margin-top: 10px;
+            margin: auto;
+        }article {
+            background-color: transparent;
+            padding: 10px;
+        }
+        article input {
+            width: 100%;
+        }
+        .info {
+            font-size: 12px;
+        }
+        }
         
     </style>
 </head>
 <body>
     <main>
         <article>
-            <h2>Pendukung Keputusan untuk menentukan Es Boba Terbaik</h2>
+            <h2>Pendukung Keputusan untuk menentukan Es Warung Makan Terbaik</h2>
             <div>
                 <form action="" method="post" id="form-alt" >
                     <div>
                         <input type="text" placeholder="Input Nama Warung" id="alternatif" required><br>
-                        <input type="text" placeholder="Input Rasa" id="criteria1" required><br>
-                        <input type="text" placeholder="Input Harga" id="criteria2" required><br>
-                        <input type="text" placeholder="Input Pelayanan" id="criteria3" required><br>
-                        <input type="text" placeholder="Input Kebersihan" id="criteria4" required><br>
-                        <input type="text" placeholder="Input Jarak" id="criteria5" required><br>
+                        <input type="text" placeholder="Input Rasa 1-10" id="criteria1" required><br>
+                        <input type="text" placeholder="Input Harga 7000" id="criteria2" required><br>
+                        <input type="text" placeholder="Input Pelayanan 1-10" id="criteria3" required><br>
+                        <input type="text" placeholder="Input Kebersihan 1-0" id="criteria4" required><br>
+                        <input type="text" placeholder="Input Jarak (m)" id="criteria5" required><br>
                     </div>
                     <button type="submit">Submit</button>
                 </form>
             </div>
         </article>
         <article>
-            <div>  
+            <div style="overflow-x: auto;">  
                 <table>
                     <thead>
                       <tr>
@@ -91,19 +126,33 @@
                         <th>Harga</th>
                         <th>Pelayanan</th>
                         <th>Kebersihan</th>
-                        <th>Jarak</th>
+                        <th>Jarak (m)</th>
+                        <th>Aksi</th>
                       </tr>
                     </thead>
                     <tbody id="resultAlternatif">
                         
                     </tbody>
                   </table>   
-            <button id="hitung">Hitung</button>
-            </div>
-            <div id="resultNormalisasi">
-
+                </div>
+                <button id="hitung">Hitung</button>
+            <div id="rank" style="overflow-x: auto;">
+                <h2>Hasil</h2>
+                <table>
+                    <thead>
+                      <tr>
+                        <th>Nama Warung</th>
+                        <th>Nilai S</th>
+                        <th>Nilai V</th>
+                      </tr>
+                    </thead>
+                    <tbody id="resultNormalisasi">
+                        
+                    </tbody>
+                  </table>   
             </div>
         </article>
+        <p class="info">Untuk menghitung kembali, silahkan refresh halaman. (Lagi tahap pengembangan):)</p>
     </main>
 
     <script src="main.js"></script>
